@@ -36,13 +36,17 @@ public class AccountService {
 
     public BigDecimal getAccountBalance(int accountNumber) {
         logger.debug("getAccountBalance called for account: " + accountNumber);
-        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository
+                .findById(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
         return account.getBalance();
     }
 
     public void deposit(int accountNumber, BigDecimal amount) {
         logger.debug("deposit called for account: " + accountNumber + " with amount: " + amount);
-        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository
+                .findById(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
     }
