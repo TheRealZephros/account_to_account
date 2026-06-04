@@ -21,6 +21,9 @@ public class TransferService {
     
     public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) {
         logger.debug("transfer called from account: " + fromAccountNumber + " to account: " + toAccountNumber + " with amount: " + amount);
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Transfer amount must be positive");
+        }
         Account fromAccount = accountRepository
                 .findById(fromAccountNumber)
                 .orElseThrow(() -> new RuntimeException("From account not found"));

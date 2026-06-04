@@ -44,6 +44,12 @@ public class AccountService {
 
     public void deposit(int accountNumber, BigDecimal amount) {
         logger.debug("deposit called for account: " + accountNumber + " with amount: " + amount);
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Deposit amount must be positive");
+        }
+        if (!accountRepository.existsById(accountNumber)) {
+            throw new RuntimeException("Account not found");
+        }
         Account account = accountRepository
                 .findById(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
