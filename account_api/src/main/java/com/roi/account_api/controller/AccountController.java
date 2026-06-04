@@ -57,7 +57,9 @@ public class AccountController {
     }
 
     @PostMapping("{accountNumber}/deposit")
-    public ResponseEntity<String> deposit(@PathVariable int accountNumber, @RequestBody DepositRequest request) {
+    public ResponseEntity<String> deposit(
+        @PathVariable int accountNumber,
+        @Valid @RequestBody DepositRequest request) {
         logger.debug("deposit endpoint called for account: " + accountNumber + " with amount: " + request.getAmount());
         try {
             accountService.deposit(accountNumber, request.getAmount());

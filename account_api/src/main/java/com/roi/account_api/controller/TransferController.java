@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.roi.account_api.dto.TransferRequest;
 import com.roi.account_api.service.TransferService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/transfer/")
 public class TransferController {
@@ -23,7 +25,8 @@ public class TransferController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
+    public ResponseEntity<String> transfer(
+        @Valid @RequestBody TransferRequest request) {
         logger.debug("transfer endpoint called");
         try {
             transferService.transfer(
