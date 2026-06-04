@@ -23,7 +23,7 @@ public class DepositRequestTests {
     void depositRequestWithNullAmountShouldFail() {
         DepositRequest request = new DepositRequest();
         BigDecimal amount = null;
-        request.setAmount(null);
+        request.setAmount(amount);
 
         var violations = validator.validate(request);
         assert(violations.size() == 1);
