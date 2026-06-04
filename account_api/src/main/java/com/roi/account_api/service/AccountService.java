@@ -40,9 +40,10 @@ public class AccountService {
         return account.getBalance();
     }
 
-
-
-
-
-
+    public void deposit(int accountNumber, BigDecimal amount) {
+        logger.debug("deposit called for account: " + accountNumber + " with amount: " + amount);
+        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
+        account.setBalance(account.getBalance().add(amount));
+        accountRepository.save(account);
+    }
 }
