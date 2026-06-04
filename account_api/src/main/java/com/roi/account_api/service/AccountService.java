@@ -1,37 +1,43 @@
 package com.roi.account_api.service;
 
 import jakarta.annotation.PostConstruct;
+
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.roi.account_api.model.Account;
+import com.roi.account_api.repository.AccountRepository;
+
 @Service
 public class AccountService {
 
+    private final AccountRepository accountRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
+
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @PostConstruct
     public void init() {
-        logger.info("AccountService bean initialized and running");
-        System.out.println("AccountService bean initialized and running");
+        logger.debug("AccountService bean initialized and running");
     }
 
-    public void createAccount() {
-        logger.info("createAccount called");
-        System.out.println("This will create a new account in the database");
+    public int createAccount(String firstName, String lastName) {
+        logger.debug("createAccount called");
+        Account account = new Account(firstName, lastName);
+        accountRepository.save(account);
+        return account.getAccountNumber();
     }
 
-    public void depositMoney() {
-        System.out.println("This will deposit money into an account in the database");
-    }
-
-    public void transferMoney() {
-        System.out.println("This will transfer money between accounts in the database");
-    }
-
-    public int getAccountBalance(String accountNumber) {
-        System.out.println("This will return the balance for account: " + accountNumber);
-        return 0; // Placeholder return value
+    public BigDecimal getAccountBalance(int accountNumber) {
+        logger.debug("getAccountBalance called for account: " + accountNumber);
+        Account account = accountRepository.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
+        return account.getBalance();
     }
 
 
