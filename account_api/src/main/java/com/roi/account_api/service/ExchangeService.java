@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.roi.account_api.dto.ExternalCurrentExchangeRateResponse;
+import com.roi.account_api.dto.ExternalHistoricalExchangeRateResponse;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -54,5 +56,55 @@ public class ExchangeService {
                         ExternalCurrentExchangeRateResponse.class);
 
         return exchangeRateResponse.getConversion_result();
+    }
+
+    public BigDecimal getHistoricalExchangeRateDKKToUSD( int year, int month, int day, BigDecimal amount) throws Exception {
+        logger.debug("getHistoricalExchangeRateDKKToUSD called");
+
+        if (year == 2012) {
+            throw new IllegalArgumentException("year 2012 not allowed");
+        }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(
+                    "https://v6.exchangerate-api.com/v6/"
+                    + apiKey
+                    + "/history/DKK/"
+                    + year
+                    + "/"
+                    + month
+                    + "/"
+                    + day
+                    + "/"
+                    + amount ))
+                .GET()
+                .build();
+        logger.error("URL:\nhttps://v6.exchangerate-api.com/v6/"
+                    + apiKey
+                    + "/history/DKK/"
+                    + year
+                    + "/"
+                    + month
+                    + "/"
+                    + day
+                    + "/"
+                    + amount);
+        
+        HttpResponse<String> response =
+                httpClient.send(
+                        request,
+                        HttpResponse.BodyHandlers.ofString());
+        
+
+        if (response.statusCode() != 200) {
+            logger.error("Failed to get historical exchange rate, status code: " + response.statusCode());
+            throw new RuntimeException("Failed to get exchange rate");
+        }
+
+        ExternalHistoricalExchangeRateResponse exchangeRateResponse =
+                objectMapper.readValue(
+                        response.body(),
+                        ExternalHistoricalExchangeRateResponse.class);
+                    
+        return exchangeRateResponse.getConversion_amounts().getOrDefault("USD", null);
     }
 }
