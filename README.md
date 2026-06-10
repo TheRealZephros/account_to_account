@@ -3,7 +3,11 @@
 ## Prerequisites
 java 17+
 
+## To use the exchange API
+in the application.properties file (account_api/src/resources/application.properties) add a valid API key for https://app.exchangerate-api.com/
+
 ## Run the application
+
 ### bash:
 ./mvnw spring-boot:run
 
