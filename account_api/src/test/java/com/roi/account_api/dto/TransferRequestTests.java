@@ -21,13 +21,10 @@ public class TransferRequestTests {
 
     @Test
     void transferRequestWithValidData() {
-        TransferRequest request = new TransferRequest();
-        request.setFromAccountNumber(123);
-        request.setToAccountNumber(456);
-        request.setAmount(new java.math.BigDecimal("100.00"));
-        assert(request.getFromAccountNumber() == 123);
-        assert(request.getToAccountNumber() == 456);
-        assert(request.getAmount().equals(new java.math.BigDecimal("100.00")));
+        TransferRequest request = new TransferRequest(123, 456, new BigDecimal("100.00"));
+        assert(request.fromAccountNumber() == 123);
+        assert(request.toAccountNumber() == 456);
+        assert(request.amount().equals(new java.math.BigDecimal("100.00")));
     }
 
     @Test

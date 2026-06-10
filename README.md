@@ -16,7 +16,7 @@ mvnw.cmd spring-boot:run
 
 ## Examples of how to hit the endpoints
 ### Create an account
-curl -X POST http://localhost:8080/accounts/create \\ \
+curl -X POST http://localhost:8080/accounts \\ \
 -H "Content-Type: application/json" \\ \
 -d '{"firstName": "John", "lastName": "Doe"}'
 
@@ -31,10 +31,14 @@ curl -X POST http://localhost:8080/accounts/1/deposit \\ \
 -d '{"amount": "100.00"}'
 
 ### Transferring 50.00 from account 1 to account 2
-curl -X POST http://localhost:8080/transfer/ \\ \
+curl -X POST http://localhost:8080/transfer \\ \
 -H "Content-Type: application/json" \\ \
 -d '{"fromAccountNumber": 1, "toAccountNumber": 2, "amount": "50.00"}'
 
+### Getting current exchange rate from DKK to USD
+curl -X GET http://localhost:8080/exchange/current/100.00 \\ \
+-H "Content-Type: application/json" \\ \
+-d ''
 
 ## Example.sh
 The provided shell script example.sh will run through each of the endpoints shown above and print the results of each step.

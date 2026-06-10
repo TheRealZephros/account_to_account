@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.roi.account_api.dto.TransferRequest;
+import com.roi.account_api.dto.TransferResponse;
 import com.roi.account_api.service.TransferService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/transfer/")
+@RequestMapping("/transfer")
 public class TransferController {
     private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
 
@@ -25,19 +26,23 @@ public class TransferController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> transfer(
+    public ResponseEntity<TransferResponse> transfer(
         @Valid @RequestBody TransferRequest request) {
         logger.debug("transfer endpoint called");
         try {
             transferService.transfer(
-                request.getFromAccountNumber(),
-                request.getToAccountNumber(),
-                request.getAmount()
+                request.fromAccountNumber(),
+                request.toAccountNumber(),
+                request.amount()
             );
-            return ResponseEntity.ok("Transfer successful");
+            return ResponseEntity.ok(new TransferResponse(request.fromAccountNumber(), request.toAccountNumber(), request.amount(), "success"));
         } catch (RuntimeException e) {
-            logger.error("Error during transfer: " + e.getMessage());
-            return ResponseEntity.status(500).body("Transfer failed");
+            logger.error("Error during transfer from {} to {}",
+                request.fromAccountNumber(),
+                request.toAccountNumber(),
+                e
+            );
+            return ResponseEntity.status(500).body(new TransferResponse(request.fromAccountNumber(), request.toAccountNumber(), request.amount(), "failure"));
         }
     }
 }

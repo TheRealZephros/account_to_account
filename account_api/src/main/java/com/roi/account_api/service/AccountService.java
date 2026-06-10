@@ -1,6 +1,6 @@
 package com.roi.account_api.service;
 
-import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
 
@@ -22,11 +22,6 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    @PostConstruct
-    public void init() {
-        logger.debug("AccountService bean initialized and running");
-    }
-
     public int createAccount(String firstName, String lastName) {
         logger.debug("createAccount called");
         Account account = new Account(firstName, lastName);
@@ -34,22 +29,21 @@ public class AccountService {
         return account.getAccountNumber();
     }
 
-    public BigDecimal getAccountBalance(int accountNumber) throws RuntimeException {
-        logger.debug("getAccountBalance called for account: " + accountNumber);
+    public BigDecimal getAccountBalance(int accountNumber) {
+        logger.debug("getAccountBalance called for account: {}", accountNumber);
         Account account = accountRepository
                 .findById(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
         return account.getBalance();
     }
 
-    public void deposit(int accountNumber, BigDecimal amount) throws RuntimeException {
-        logger.debug("deposit called for account: " + accountNumber + " with amount: " + amount);
+    @Transactional
+    public void deposit(int accountNumber, BigDecimal amount) {
+        logger.debug("deposit called for account: {} with amount: {}", accountNumber, amount);
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Deposit amount must be positive");
         }
-        if (!accountRepository.existsById(accountNumber)) {
-            throw new RuntimeException("Account not found");
-        }
+        
         Account account = accountRepository
                 .findById(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));

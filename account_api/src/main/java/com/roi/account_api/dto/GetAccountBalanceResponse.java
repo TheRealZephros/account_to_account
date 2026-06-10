@@ -4,23 +4,6 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotNull;
 
-public class GetAccountBalanceResponse {
-    @NotNull
-    private BigDecimal balance;
-
-    public GetAccountBalanceResponse() {
-    }
-
-    public GetAccountBalanceResponse(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-}
+public record GetAccountBalanceResponse(
+    @NotNull BigDecimal balance
+) {}

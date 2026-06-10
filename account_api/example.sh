@@ -1,6 +1,6 @@
 echo "Testing Account API..." && echo '' && \
 echo "Creating account..." && \
-curl -X POST http://localhost:8080/accounts/create \
+curl -X POST http://localhost:8080/accounts \
 -H "Content-Type: application/json" \
 -d '{"firstName": "John", "lastName": "Doe"}' \
 && echo '' && echo '' && \
@@ -20,7 +20,7 @@ curl -X GET http://localhost:8080/accounts/1/balance \
 -d '' \
 && echo '' && echo '' && \
 echo "Creating another account..." && \
-curl -X POST http://localhost:8080/accounts/create \
+curl -X POST http://localhost:8080/accounts \
 -H "Content-Type: application/json" \
 -d '{"firstName": "John", "lastName": "Doe"}' \
 && echo '' && \
@@ -30,7 +30,7 @@ curl -X GET http://localhost:8080/accounts/2/balance \
 -d '' \
 && echo '' && echo '' && \
 echo "Transferring 50.00 from account 1 to account 2..." && \
-curl -X POST http://localhost:8080/transfer/ \
+curl -X POST http://localhost:8080/transfer \
 -H "Content-Type: application/json" \
 -d '{"fromAccountNumber": 1, "toAccountNumber": 2, "amount": "50.00"}' \
 && echo '' && \

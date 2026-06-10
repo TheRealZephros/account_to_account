@@ -5,11 +5,10 @@ import java.math.BigDecimal;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
-public record DepositRequest(
+public record DepositResponse(
+    int accountNumber,
     @NotNull
-    @DecimalMin(
-        value = "0.01",
-        message = "Deposit amount must be greater than zero"
-    )
-    BigDecimal amount
+    @DecimalMin("0.1")
+    BigDecimal balance,
+    String status
 ) {}

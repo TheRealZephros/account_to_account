@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.roi.account_api.model.Account;
 import com.roi.account_api.repository.AccountRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TransferService {
     private final AccountRepository accountRepository;
@@ -19,10 +21,17 @@ public class TransferService {
         this.accountRepository = accountRepository;
     }
     
-    public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) throws RuntimeException {
-        logger.debug("transfer called from account: " + fromAccountNumber + " to account: " + toAccountNumber + " with amount: " + amount);
+    @Transactional
+    public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) {
+        logger.debug("transfer called from account: {} to account: {} with amount: {}", fromAccountNumber, toAccountNumber, amount);
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Transfer amount must be positive");
+        }
+
+        if (fromAccountNumber == toAccountNumber) {
+            throw new RuntimeException(
+                "Cannot transfer to the same account"
+            );
         }
         Account fromAccount = accountRepository
                 .findById(fromAccountNumber)
@@ -37,6 +46,6 @@ public class TransferService {
         toAccount.setBalance(toAccount.getBalance().add(amount));
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
-        logger.debug("Transfer successful from account: " + fromAccountNumber + " to account: " + toAccountNumber + " with amount: " + amount);
+        logger.debug("Transfer successful from account: {} to account: {} with amount: {}", fromAccountNumber, toAccountNumber, amount);
     }
 }

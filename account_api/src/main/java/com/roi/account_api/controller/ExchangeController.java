@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
-@RequestMapping("/exchange/")
+@RequestMapping("/exchange")
 public class ExchangeController {
     private static final Logger logger = LoggerFactory.getLogger(ExchangeController.class);
+    private static final String ERROR_GETTING_EXCHANGE_RATE = "Error getting exchange rate: {}";
 
     private final ExchangeService exchangeService;
 
@@ -33,13 +34,13 @@ public class ExchangeController {
         this.exchangeService = exchangeService;
     }
 
-    @GetMapping("current/{amount}")
+    @GetMapping("/current/{amount}")
     public ResponseEntity<CurrentExchangeRateResponse> getCurrentExchangeRate(@PathVariable BigDecimal amount) {
         BigDecimal usdAmount;
         try{
             usdAmount = exchangeService.getCurrentExchangeRateDKKToUSD(amount);
         } catch (Exception e) {
-            logger.error("Error getting exchange rate: " + e.getMessage());
+            logger.error(ERROR_GETTING_EXCHANGE_RATE, e);
             return ResponseEntity.status(500).build();
         }
         CurrentExchangeRateResponse response = new CurrentExchangeRateResponse(amount, usdAmount);
@@ -53,7 +54,7 @@ public class ExchangeController {
     // - this plan includes use of our Standard endpoint and Pair Conversion endpoint 
     // as well as the ability to switch base currency.
     @Validated
-    @GetMapping("historical/{year}/{month}/{day}")
+    @GetMapping("/historical/{year}/{month}/{day}")
     public ResponseEntity<HistoricalExchangeRateResponse> getHistoricalExchangeRate(
         @PathVariable @Positive @Min(2005) @Max(2015) int year, 
         @PathVariable @Positive int month, 
@@ -69,13 +70,13 @@ public class ExchangeController {
         try{
             usdCurrentAmount = exchangeService.getCurrentExchangeRateDKKToUSD(new BigDecimal("100.00"));
         } catch (Exception e) {
-            logger.error("Error getting exchange rate: " + e.getMessage());
+            logger.error(ERROR_GETTING_EXCHANGE_RATE, e);
             return ResponseEntity.status(500).build();
         }
         try{
             usdHistoricalAmount = exchangeService.getHistoricalExchangeRateDKKToUSD(year, month, day, new BigDecimal("100.00"));
         } catch (Exception e) {
-            logger.error("Error getting exchange rate: " + e.getMessage());
+            logger.error(ERROR_GETTING_EXCHANGE_RATE, e);
             return ResponseEntity.status(500).build();
         }
 

@@ -46,7 +46,7 @@ public class ExchangeService {
         
 
         if (response.statusCode() != 200) {
-            logger.error("Failed to get exchange rate, status code: " + response.statusCode());
+            logger.error("Failed to get exchange rate, status code: {}", response.statusCode());
             throw new RuntimeException("Failed to get exchange rate");
         }
 
@@ -55,7 +55,7 @@ public class ExchangeService {
                         response.body(),
                         ExternalCurrentExchangeRateResponse.class);
 
-        return exchangeRateResponse.getConversion_result();
+        return exchangeRateResponse.conversion_result();
     }
 
     public BigDecimal getHistoricalExchangeRateDKKToUSD( int year, int month, int day, BigDecimal amount) throws Exception {
@@ -86,7 +86,7 @@ public class ExchangeService {
         
 
         if (response.statusCode() != 200) {
-            logger.error("Failed to get historical exchange rate, status code: " + response.statusCode());
+            logger.error("Failed to get historical exchange rate, status code: {}", response.statusCode());
             throw new RuntimeException("Failed to get exchange rate");
         }
 
@@ -95,6 +95,6 @@ public class ExchangeService {
                         response.body(),
                         ExternalHistoricalExchangeRateResponse.class);
                     
-        return exchangeRateResponse.getConversion_amounts().getOrDefault("USD", null);
+        return exchangeRateResponse.conversion_amounts().getOrDefault("USD", null);
     }
 }

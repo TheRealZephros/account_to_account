@@ -22,7 +22,7 @@ public class GetAccountBalanceResponseTests {
     @Test
     void getAccountBalanceResponseWithValidData() {
         GetAccountBalanceResponse response = new GetAccountBalanceResponse(new BigDecimal("100.00"));
-        assert(response.getBalance().equals(new java.math.BigDecimal("100.00")));
+        assert(response.balance().equals(new java.math.BigDecimal("100.00")));
     }
 
     @Test

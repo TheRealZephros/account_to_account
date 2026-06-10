@@ -21,9 +21,8 @@ public class DepositRequestTests {
 
     @Test
     void depositRequestWithNullAmountShouldFail() {
-        DepositRequest request = new DepositRequest();
         BigDecimal amount = null;
-        request.setAmount(amount);
+        DepositRequest request = new DepositRequest(amount);
 
         var violations = validator.validate(request);
         assert(violations.size() == 1);
@@ -31,16 +30,14 @@ public class DepositRequestTests {
 
     @Test
     void depositRequestWithNegativeAmountShouldFail() {
-        DepositRequest request = new DepositRequest();
-        request.setAmount(new BigDecimal("-10.00"));
+        DepositRequest request = new DepositRequest(new BigDecimal("-10.00"));
         var violations = validator.validate(request);
         assert(violations.size() == 1);
     }
 
     @Test
     void depositRequestWithZeroAmountShouldFail() {
-        DepositRequest request = new DepositRequest();
-        request.setAmount(BigDecimal.ZERO);
+        DepositRequest request = new DepositRequest(BigDecimal.ZERO);
         var violations = validator.validate(request);
         assert(violations.size() == 1);
     }

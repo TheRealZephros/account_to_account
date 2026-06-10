@@ -24,11 +24,9 @@ public class CreateAccountRequestTests {
 
     @Test
     void createAccountRequestWithValidData() {
-        CreateAccountRequest request = new CreateAccountRequest();
-        request.setFirstName("John");
-        request.setLastName("Doe");
-        assert(request.getFirstName().equals("John"));
-        assert(request.getLastName().equals("Doe"));
+        CreateAccountRequest request = new CreateAccountRequest("John", "Doe");
+        assert(request.firstName().equals("John"));
+        assert(request.lastName().equals("Doe"));
     }
 
     @Test
