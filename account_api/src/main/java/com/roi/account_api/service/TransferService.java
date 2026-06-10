@@ -19,7 +19,7 @@ public class TransferService {
         this.accountRepository = accountRepository;
     }
     
-    public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) {
+    public void transfer(int fromAccountNumber, int toAccountNumber, BigDecimal amount) throws RuntimeException {
         logger.debug("transfer called from account: " + fromAccountNumber + " to account: " + toAccountNumber + " with amount: " + amount);
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Transfer amount must be positive");

@@ -34,7 +34,7 @@ public class AccountService {
         return account.getAccountNumber();
     }
 
-    public BigDecimal getAccountBalance(int accountNumber) {
+    public BigDecimal getAccountBalance(int accountNumber) throws RuntimeException {
         logger.debug("getAccountBalance called for account: " + accountNumber);
         Account account = accountRepository
                 .findById(accountNumber)
@@ -42,7 +42,7 @@ public class AccountService {
         return account.getBalance();
     }
 
-    public void deposit(int accountNumber, BigDecimal amount) {
+    public void deposit(int accountNumber, BigDecimal amount) throws RuntimeException {
         logger.debug("deposit called for account: " + accountNumber + " with amount: " + amount);
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Deposit amount must be positive");

@@ -65,6 +65,4 @@ public class AccountServiceTests {
             assert(e.getMessage().equals("Account not found"));
         }
     }
-    // TODO - Add tests for AccountService methods
-
 }
