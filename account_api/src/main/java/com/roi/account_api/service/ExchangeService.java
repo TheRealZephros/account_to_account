@@ -78,16 +78,6 @@ public class ExchangeService {
                     + amount ))
                 .GET()
                 .build();
-        logger.error("URL:\nhttps://v6.exchangerate-api.com/v6/"
-                    + apiKey
-                    + "/history/DKK/"
-                    + year
-                    + "/"
-                    + month
-                    + "/"
-                    + day
-                    + "/"
-                    + amount);
         
         HttpResponse<String> response =
                 httpClient.send(
